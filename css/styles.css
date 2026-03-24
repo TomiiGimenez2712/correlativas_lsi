@@ -90,20 +90,28 @@ header {
 
 .clear-selection-btn {
     background-color: transparent;
-    border: 1px solid var(--accent-color);
+    border: 2px solid var(--accent-color);
     color: var(--accent-color);
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-family: var(--font-family);
-    font-weight: 400;
-    transition: background-color 0.2s, color 0.2s;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
 
-.clear-selection-btn:hover {
-    background-color: var(--accent-color);
-    color: var(--white-color);
+@media (hover: hover) {
+    .clear-selection-btn:hover {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+        color: var(--white-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+}
+.clear-selection-btn:active {
+    transform: translateY(1px);
 }
 
 /* Main Content */
@@ -166,9 +174,14 @@ main {
     border: 1px solid transparent;
 }
 
-.subject-container:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+@media (hover: hover) {
+    .subject-container:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+}
+.subject-container:active {
+    transform: translateY(-1px);
 }
 
 .subjects-grid .subject-container:nth-child(odd):last-child {
@@ -182,9 +195,11 @@ main {
     border-color: light-dark(rgba(118, 118, 118, 0.3), rgba(195, 195, 195, 0.3));
     cursor: not-allowed;
 }
-.status_0:hover {
-    transform: none;
-    box-shadow: none;
+@media (hover: hover) {
+    .status_0:hover {
+        transform: none;
+        box-shadow: none;
+    }
 }
 .status_available { /* Available to take */
     background-color: #d3d3d3;
@@ -209,7 +224,7 @@ main {
 /* Footer */
 footer {
     background-color: var(--footer-bg-color);
-    padding: 1.5rem 2rem;
+    padding: 1.5rem 2rem calc(1.5rem + env(safe-area-inset-bottom));
     text-align: center;
     border-top: 1px solid var(--border-color);
 }
@@ -284,6 +299,8 @@ footer {
     border-radius: 8px;
     width: 90%;
     max-width: 500px;
+    max-height: 85vh;
+    overflow-y: auto;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     position: relative;
 }
@@ -324,17 +341,33 @@ footer {
 .modal-status-buttons button {
     flex-grow: 1;
     padding: 0.75rem;
-    border-radius: 5px;
+    border-radius: 8px;
     border: 1px solid var(--border-color);
+    background-color: var(--white-color);
+    color: var(--text-color);
     cursor: pointer;
     font-family: var(--font-family);
     font-weight: 600;
-    transition: background-color 0.2s;
+    transition: all 0.3s ease;
 }
+
+@media (hover: hover) {
+    .modal-status-buttons button:not(:disabled):hover {
+        border-color: var(--accent-color);
+        background-color: var(--accent-color);
+        color: var(--white-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+}
+.modal-status-buttons button:active {
+    transform: translateY(1px);
+}
+
 .modal-status-buttons button:disabled {
-    opacity: 0.7;
-    filter: grayscale(50%);
+    opacity: 0.6;
     cursor: not-allowed;
+    background-color: var(--status-locked-bg);
 }
 
 .prerequisites-list button {
@@ -366,10 +399,16 @@ footer {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    body:not(.index-body) {
+        zoom: initial; /* Reseteamos el zoom en móviles para un rem más natural */
+    }
+    html {
+        font-size: 95%; /* Reducimos tipografía para encajar todo cómodamente sin zoom */
+    }
     header {
         flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
+        gap: 0.5rem;
+        padding: 1rem 0.5rem;
     }
     main {
         padding: 1.5rem 1rem;
@@ -379,13 +418,14 @@ footer {
     }
     .year-container {
         padding: 1.2rem;
-        padding-left: 1.5rem; 
+        padding-left: 1rem;
+        padding-top: 3.5rem; 
     }
 
     .year-title {
         font-size: 1.5rem; 
-        left: 5px;
-        top: 1.2rem;
+        left: 0.5rem;
+        top: 0.8rem;
     }
 
     .subjects-grid {
@@ -400,17 +440,18 @@ footer {
 
 /*
 |--------------------------------------------------------------------------
-| Dark Theme
+| Dark Theme (Original)
 |--------------------------------------------------------------------------
 */
 html[data-theme='dark'] {
+    color-scheme: dark; /* Scrollbars nativos */
     --primary-bg-color: #121212;
     --text-color: #e1e1e1;
     --accent-color: #94a3b8; 
-    --accent-hover-color: #a05ff9;
     --border-color: #2d2d2d;
-    --white-color: #1e1e1e; /* El "blanco" de los contenedores ahora es un gris oscuro */
+    --white-color: #1e1e1e; 
     --footer-bg-color: #1e1e1e;
+    
     --status-locked-bg: #2a2a2a;
     --status-locked-text: #555;
     --status-locked-border: #333;
@@ -420,30 +461,39 @@ html[data-theme='dark'] .github_img {
     filter: invert(80%);
 }
 
-/* Dark theme subject statuses */
+html[data-theme='dark'] .progress-bar-wrapper {
+    background-color: var(--status-locked-bg);
+}
+
+/* Progreso y status originales */
 html[data-theme='dark'] .status_available {
     background-color: transparent;
     color: var(--accent-color);
     border: 1px solid var(--accent-color);
 }
+
 html[data-theme='dark'] .status_1 { /* Regular */
-    background-color: #3e301d;
-    color: #f8e3a1;
+    background-color: #3e301d; /* Su marrón original */
+    color: #f8e3a1; 
     border: 1px solid #5a4f3c;
 }
+
 html[data-theme='dark'] .status_2 { /* Approved */
-    background-color: #1c3d2f;
-    color: #34d058;
+    background-color: #1c3d2f; /* Su verde original */
+    color: #34d058; 
     border: 1px solid #2ea043;
 }
+
 html[data-theme='dark'] .subject_highlight {
-    box-shadow: 0 0 15px 3px var(--accent-color);
+    box-shadow: 0 0 15px 3px var(--accent-color); 
 }
+
 html[data-theme='dark'] .req-met {
     background-color: #1c3d2f;
     border-color: #2ea043;
     color: #34d058;
 }
+
 html[data-theme='dark'] .req-not-met {
     background-color: #4d1c20;
     border-color: #a6343c;
@@ -466,8 +516,8 @@ html[data-theme='dark'] .req-not-met {
     border: 1px solid var(--border-color);
     border-radius: 5px;
     cursor: pointer;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -480,8 +530,8 @@ html[data-theme='dark'] .req-not-met {
 }
 
 #theme-toggle-btn svg {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
 }
 
 .moon-icon {
@@ -561,13 +611,15 @@ html[data-theme='dark'] .req-not-met {
     text-align: center;
 }
 
-.plan-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.07);
-}
+@media (hover: hover) {
+    .plan-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.07);
+    }
 
-html[data-theme='dark'] .plan-card:hover {
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    html[data-theme='dark'] .plan-card:hover {
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
 }
 
 .plan-card h3 {
@@ -621,8 +673,8 @@ html[data-theme='dark'] .plan-card p {
 
 .back-to-index-btn {
     /* Sizing and Layout to match theme button */
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     display: flex;
     justify-content: center;
     align-items: center;
